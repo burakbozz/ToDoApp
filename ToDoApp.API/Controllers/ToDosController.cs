@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ToDoApp.Models.Dtos.ToDos.Requests;
@@ -11,14 +12,15 @@ namespace ToDoApp.API.Controllers
     public class ToDosController(IToDoService _toDoService) : ControllerBase
     {
         [HttpGet("getall")]
-
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAll()
         {
             var result = _toDoService.GetAll();
             return Ok(result);
         }
-
+        
         [HttpPost("add")]
+        [Authorize]
         public IActionResult Add([FromBody] CreateToDoRequest dto)
         {
             var userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
@@ -27,7 +29,7 @@ namespace ToDoApp.API.Controllers
         }
 
         [HttpGet("getbyid/{id}")]
-
+        [Authorize]
         public IActionResult GetById([FromRoute] Guid id)
         {
             var result = _toDoService.GetById(id);
@@ -35,6 +37,7 @@ namespace ToDoApp.API.Controllers
         }
 
         [HttpDelete("delete")]
+        [Authorize]
         public IActionResult Delete([FromQuery] Guid id)
         {
 
@@ -49,13 +52,15 @@ namespace ToDoApp.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("user")]
+        [HttpGet("user/{userId}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllByUserId([FromQuery] string userId)
         {
             var result = _toDoService.GetAllByUserId(userId);
             return Ok(result);
         }
-        [HttpGet("category")]
+        [HttpGet("category/{categoryId}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllByCategoryId([FromQuery] int categoryId)
         {
             var result = _toDoService.GetAllByCategoryId(categoryId);

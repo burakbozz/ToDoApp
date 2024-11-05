@@ -26,6 +26,7 @@ namespace ToDoApp.Service
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IToDoService, ToDoService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<RoleService>();
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             return services;

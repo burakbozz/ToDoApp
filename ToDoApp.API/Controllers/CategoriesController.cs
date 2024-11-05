@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Models.Dtos.Categories.Requests;
 using ToDoApp.Service.Abstracts;
 
@@ -12,7 +13,8 @@ public class CategoryController(ICategoryService _categoryService) : ControllerB
         var result = _categoryService.GetAll();
         return Ok(result);
     }
-    [HttpPost("add")]
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
     public IActionResult Add([FromBody] CreateCategoryRequest dto)
     {
         var result = _categoryService.Add(dto);
@@ -25,14 +27,16 @@ public class CategoryController(ICategoryService _categoryService) : ControllerB
         return Ok(result);
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete]
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete([FromQuery] int id)
     {
         var result = _categoryService.Remove(id);
         return Ok(result);
     }
 
-    [HttpPut("update")]
+    [HttpPut]
+    [Authorize(Roles = "Admin")]
     public IActionResult Update([FromBody] UpdateCategoryRequest dto)
     {
         var result = _categoryService.Update(dto);
