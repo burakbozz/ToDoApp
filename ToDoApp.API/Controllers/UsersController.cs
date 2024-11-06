@@ -9,7 +9,7 @@ namespace ToDoApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController(IUserService userService, RoleService roleService) : ControllerBase
+    public class UsersController(IUserService userService, RoleService roleService) : CustomBaseController
     {
         [HttpGet("email")]
         public async Task<IActionResult> GetByEmail([FromQuery] string email)
